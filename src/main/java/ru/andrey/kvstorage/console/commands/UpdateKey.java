@@ -24,7 +24,8 @@ public class UpdateKey implements DatabaseCommand {
         this.environment = environment;
 
         if (args.length != ARGS_COUNT) {
-            throw new IllegalArgumentException("Wrong arguments count: " + (ARGS_COUNT - 1) + "expected, but " + (Math.max(args.length-1, 0) + "provided"));
+            throw new IllegalArgumentException(String.format("Wrong arguments count: %d expected, but %d provided",
+                    ARGS_COUNT - 1, Math.max(args.length-1, 0)));
         }
         this.databaseName = args[1];
         this.tableName = args[2];
@@ -32,10 +33,11 @@ public class UpdateKey implements DatabaseCommand {
         this.value = args[4];
     }
 
+    @Override
     public DatabaseCommandResult execute() {
         Optional<Database> databaseObject = environment.getDatabase(databaseName);
         if (databaseObject.isEmpty()) {
-            return DatabaseCommandResult.error("Database " + databaseName + " does not exist");
+            return DatabaseCommandResult.error(String.format("Database %s does not exist", databaseName));
         }
 
         try {

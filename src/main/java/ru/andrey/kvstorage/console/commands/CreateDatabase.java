@@ -21,19 +21,21 @@ public class CreateDatabase implements DatabaseCommand {
         this.environment = environment;
 
         if (args.length != ARGS_COUNT) {
-            throw new IllegalArgumentException("Wrong arguments count: " + (ARGS_COUNT - 1) + "expected, but " + (Math.max(args.length-1, 0) + "provided"));
+            throw new IllegalArgumentException(String.format("Wrong arguments count: %d expected, but %d provided",
+                    ARGS_COUNT - 1, Math.max(args.length-1, 0)));
         }
         databaseName = args[1];
     }
 
+    @Override
     public DatabaseCommandResult execute() {
         Optional<Database> databaseObject = environment.getDatabase(databaseName);
         if (databaseObject.isPresent()) {
-            return DatabaseCommandResult.success("Database " + databaseName + " already exists");
+            return DatabaseCommandResult.success(String.format("Database %s already exists", databaseName));
         }
 
-        //Заглушка для добавления базы
+        // Заглушка для добавления базы
         environment.addDatabase(null);
-        return DatabaseCommandResult.success("Database " + databaseName + " created successfully");
+        return DatabaseCommandResult.success(String.format("Database %s created successfully", databaseName));
     }
 }

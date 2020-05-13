@@ -31,15 +31,8 @@ public interface DatabaseCommandResult {
 
         public BaseDatabaseCommandResult(String result, String error, DatabaseCommandStatus status) {
             this.status = status;
-
-            if (isSuccess()) {
-                this.result = result;
-                this.errorMessage = null;
-            }
-            else {
-                this.result = null;
-                this.errorMessage = error;
-            }
+            this.result = isSuccess() ? result : null;
+            this.errorMessage = isSuccess() ? null : error;
         }
 
         public Optional<String> getResult() {

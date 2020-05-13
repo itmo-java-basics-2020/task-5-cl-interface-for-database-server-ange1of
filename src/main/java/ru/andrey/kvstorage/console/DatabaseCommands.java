@@ -36,23 +36,24 @@ public enum DatabaseCommands {
     };
 
 
-    protected abstract DatabaseCommand getCommand(ExecutionEnvironment env, String... args) throws IllegalArgumentException;
+    public abstract DatabaseCommand getCommand(ExecutionEnvironment env, String... args) throws IllegalArgumentException;
 
     public static DatabaseCommand parseCommand(ExecutionEnvironment env, String commandString) throws IllegalArgumentException {
         if (commandString == null || commandString.isEmpty() || commandString.isBlank()) {
             throw new IllegalArgumentException("Invalid command format");
         }
 
-        //Получаем термы команды
+        // Получаем термы команды
         String[] args = commandString.split(" ");
+        String commandName = args[0];
 
         for (DatabaseCommands command: DatabaseCommands.values()) {
-            if (args[0].equals(command.name())) {
-                //Может выкинуть IllegalArgumentException, пробрасываем дальше
+            if (commandName.equals(command.name())) {
+                // Может выкинуть IllegalArgumentException, пробрасываем дальше
                 return command.getCommand(env, args);
             }
         }
 
-        throw new IllegalArgumentException("Unknown command type: " + args[0]);
+        throw new IllegalArgumentException(String.format("Unknown command type: %s", commandName));
     }
 }
